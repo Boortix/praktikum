@@ -1,4 +1,4 @@
-Link: [Repository](https://boortix.github.io/repository/)
+Link: [App page](https://boortix.github.io/praktikum/)
 
 ## Installation: 
 Version: v0.0.1
