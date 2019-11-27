@@ -16,7 +16,7 @@ class Popup extends Component{
 
   open() {
     this._element.classList.add('popup_is-opened');
-    this._container.appendChild(this._element);
+    this.appendTo(this._container);
     document.addEventListener('keyup', this._onEscapeKeyPressHandler)
   }
 

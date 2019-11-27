@@ -22,13 +22,13 @@ api.getAppInfo()
     userInfoPopup.setSubmitCallback((info) => {
       api.setUserInfo(info)
         .then(data => userInfoSection.setView(data))
-        .catch(e => userInfoSection.setView());
+        .catch(e => alert(e.message));
     });
 
     avatarPopup.setSubmitCallback((info) => {
       api.setUserAvatar(info)
         .then(data => userInfoSection.setView(data))
-        .catch(e => userInfoSection.restoreView());
+        .catch(e => alert(e.message));
     });
 
     newCardPopup.setSubmitCallback((newCardInfo) => {

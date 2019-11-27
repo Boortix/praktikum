@@ -20,10 +20,6 @@ class UserInfoSection extends Component {
     if (info.avatar) this._avatarElement.style.backgroundImage = `url(${info.avatar})`;
   }
 
-  restoreView() {
-    this.setView(this.data);
-  }
-
   getInfo() {
     return {
       name: this._nameElement.textContent,

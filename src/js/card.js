@@ -23,9 +23,6 @@ class Card extends Component{
     this.setLike();
   }
 
-  restoreView() {
-    this.setView(this.data);
-  }
   _getTemplate(data) {
     return createCardElement(data)
   }
@@ -46,11 +43,7 @@ class Card extends Component{
     this._element.remove();
   }
 
-  setHandlers({
-    removeHandlerCallback,
-    openHandlerCallback,
-    likeHandlerCallback
-  }) {
+  setHandlers({ removeHandlerCallback, openHandlerCallback, likeHandlerCallback }) {
 
     this._element.addEventListener('click', (e) => {
       e.stopPropagation();

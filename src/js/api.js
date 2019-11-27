@@ -16,7 +16,6 @@ class Api {
       }
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch(e => alert('Ошибка загрузки карточек!'))
   }
 
   addNewCard({name, link}) {
@@ -32,7 +31,6 @@ class Api {
       })
     })
       .then(res => res.ok ? res.json() : Promise.reject()).then(res => res.json())
-      .catch(e => alert('Ошибка!'));
   }
 
   deleteCard(cardID) {
@@ -43,7 +41,6 @@ class Api {
       }
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch(e => alert('Ошибка!'));
   }
 
   getUserInfo() {
@@ -53,7 +50,6 @@ class Api {
       }
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch(e => alert('Ошибка загрузки и информации пользователя!'))
   }
 
   setUserInfo({ name, about }) {
@@ -69,7 +65,6 @@ class Api {
       })
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch(e => alert('Ошибка!'));
   }
 
   setUserAvatar({ avatar }) {
@@ -84,7 +79,6 @@ class Api {
       })
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch((e) => alert('Ошибка!'));
   }
 
   changeLikeCardStatus(cardID, like) {
@@ -96,7 +90,6 @@ class Api {
       }
     })
       .then(res => res.ok ? res.json() : Promise.reject())
-      .catch(e => alert('Ошибка!'));
   }
 }
 
