@@ -21,77 +21,64 @@ api.getAppInfo()
 
     userInfoPopup.setSubmitCallback((info) => {
       api.setUserInfo(info)
-        .then(data => userInfoSection.setData(data))
-        .catch(e => userInfoSection.setData());
+        .then(data => userInfoSection.setView(data))
+        .catch(e => userInfoSection.setView());
     });
 
     avatarPopup.setSubmitCallback((info) => {
       api.setUserAvatar(info)
-        .then(data => userInfoSection.setData(data))
-        .catch(e => userInfoSection.setData());
+        .then(data => userInfoSection.setView(data))
+        .catch(e => userInfoSection.restoreView());
     });
 
     newCardPopup.setSubmitCallback((newCardInfo) => {
       api.addNewCard(newCardInfo)
         .then(data => {
           cardsInfo.push(data);
-          cardListSection.setData(getCardData(data));
+          cardListSection.setView(getCardData(data));
         })
     });
 
-    const cardListSection = new CardListSection({
-      selector: '.places-list'
+    const userInfoSection = new UserInfoSection();
+    userInfoSection.setHandlers({
+      editButtonClickCallback: () => userInfoPopup.open(userInfoSection.getInfo()),
+      addButtonClickCallback: () => newCardPopup.open(),
+      avatarImgClickCallback: () => avatarPopup.open(userInfoSection.getInfo())
     });
+    userInfoSection.appendTo(document.querySelector('.profile.root__section'));
 
-    const userInfoSection = new UserInfoSection({
-      selector: '.profile',
-      handlers: [
-        {
-          selector: '.user-info__button_edit',
-          eventType: 'click',
-          callback: () => userInfoPopup.open(userInfoSection.getInfo())
-        },
-        {
-          selector: '.user-info__button_add',
-          eventType: 'click',
-          callback: () => newCardPopup.open()
-        },
-        {
-          selector: '.user-info__photo',
-          eventType: 'click',
-          callback: () => avatarPopup.open(userInfoSection.getInfo())
-        }
-      ]
-    });
-
+    const cardListSection = new CardListSection();
+    cardListSection.appendTo(document.querySelector('.root'));
     function getCardData(cardInfo) {
       return {
         data: {...cardInfo, currentUserId: userInfo._id},
-        removeHandlerCallback: (card) => {
-          api.deleteCard(card.id)
-            .then(() => {
-              cardsInfo = cardsInfo.filter(item => {
-                return item._id !== cardInfo._id;
-              });
-              card.remove()
-            })
-        },
-        openHandlerCallback: () => {
-          picturePopup.open(cardInfo.link);
-          return picturePopup
-        },
-        likeHandlerCallback: (card) => {
-          api.changeLikeCardStatus(card.id, !card.isLiked)
-            .then(data => {
-              const index = cardsInfo.findIndex(item => item._id === card.id);
-              cardsInfo.splice(index, 1, data);
-              card.setView({...data, currentUserId: userInfo._id});
-            })
+        handlers: {
+          removeHandlerCallback: (card) => {
+            api.deleteCard(card.id)
+              .then(() => {
+                cardsInfo = cardsInfo.filter(item => {
+                  return item._id !== cardInfo._id;
+                });
+                card.remove()
+              })
+          },
+          openHandlerCallback: () => {
+            picturePopup.open(cardInfo.link);
+            return picturePopup
+          },
+          likeHandlerCallback: (card) => {
+            api.changeLikeCardStatus(card.id, !card.isLiked)
+              .then(data => {
+                const index = cardsInfo.findIndex(item => item._id === card.id);
+                cardsInfo.splice(index, 1, data);
+                card.setView({...data, currentUserId: userInfo._id});
+              })
+          }
         }
       }
     }
 
-    cardListSection.setData(cardsInfo.map(item => getCardData(item)));
-    userInfoSection.setData(userInfo);
+    cardListSection.setView(cardsInfo.map(item => getCardData(item)));
+    userInfoSection.setView(userInfo);
   });
 

@@ -6,8 +6,8 @@ class PopupWithForm extends Popup {
     this._submitCallback = () => {};
   }
 
-  _setHandlers() {
-    super._setHandlers();
+  setHandlers() {
+    super.setHandlers();
     this._inputs = Array.from(this._element.querySelectorAll('.js-popup-input'));
     this._errorMessageElements = Array.from(this._element.querySelectorAll('.popup__error-message'));
 

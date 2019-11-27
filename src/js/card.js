@@ -1,3 +1,5 @@
+import Component from './component';
+
 const cardTemplate = document.querySelector('#place-card-template').content.querySelector('.place-card');
 
 function createCardElement(data) {
@@ -7,15 +9,11 @@ function createCardElement(data) {
   return newCardElement;
 }
 
-class Card {
-  constructor({data, removeHandlerCallback, openHandlerCallback, likeHandlerCallback}) {
-    this._removeCallback = removeHandlerCallback || (() => {});
-    this._openCallback = openHandlerCallback || (() => {});
-    this._likeCallback = likeHandlerCallback || (() => {});
-    this._element = createCardElement(data);
+class Card extends Component{
+  constructor(data) {
+    super(data);
     this._buttonElementToLike = this._element.querySelector('.place-card__like-icon');
     this.setView(data);
-    this._setHandlers();
   }
 
   setView(data) {
@@ -25,8 +23,11 @@ class Card {
     this.setLike();
   }
 
-  get node() {
-    return this._element;
+  restoreView() {
+    this.setView(this.data);
+  }
+  _getTemplate(data) {
+    return createCardElement(data)
   }
 
   get id() {
@@ -38,34 +39,34 @@ class Card {
   }
 
   setLike() {
-    if (this.isLiked) this._buttonElementToLike.classList.add('place-card__like-icon_liked');
-    else this._buttonElementToLike.classList.remove('place-card__like-icon_liked');
-  }
-
-  open() {
-    this._openCallback();
+    this._buttonElementToLike.classList.toggle('place-card__like-icon_liked', this.isLiked)
   }
 
   remove() {
     this._element.remove();
   }
 
-  _setHandlers() {
+  setHandlers({
+    removeHandlerCallback,
+    openHandlerCallback,
+    likeHandlerCallback
+  }) {
+
     this._element.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.open();
+      openHandlerCallback();
     });
 
     this._element.querySelector('.place-card__delete-icon').addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._removeCallback(this);
+      this.removeHandlerCallback(this);
     });
 
     this._buttonElementToLike.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this._likeCallback(this)
+      likeHandlerCallback(this)
     })
   }
 
